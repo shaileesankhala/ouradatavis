@@ -1,37 +1,166 @@
 <!DOCTYPE html>
-<html class="no-js">
-	<head>
-		<meta charset="utf-8">
-    	<title>Data Loader</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="styles.css" />
-		<script
-   src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js"
-   integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY="
-   crossorigin="anonymous"></script>
-		<script src="p5.min.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DataVis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <script src="p5.min.js"></script>
+		<script src="sketch.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
 
   <body>
+    <div id="main-content">
+      <div id="header">
+        <div id="header-lhs">
+          <h1>Joanna Poon</h1>
+          <div id="header-lhs-subtext">
+            <p>Ozempic Study</p>
+            <div id="patient-number">Patient #1234567</div>
+          </div>
+        </div>
 
-    <div id="sketch">
+        <div id="header-rhs">
+          <div class="info-section">
+            <div class="info">F</div>
+            <div class="info-title">sex</div>
+          </div>
+          <div class="info-section">
+            <div class="info">21</div>
+            <div class="info-title">age</div>
+          </div>
+          <div class="info-section">
+            <div class="info">164</div>
+            <div class="info-title">
+              height <span class="subtext">(cm)</span>
+            </div>
+          </div>
+          <div class="info-section">
+            <div class="info">110</div>
+            <div class="info-title">
+              weight <span class="subtext">(lbs)</span>
+            </div>
+          </div>
+
+          <div class="button" id="add-data" onclick="openModal()">
+            <img src="assets/add.png" class="icon" />
+          </div>
+        </div>
+      </div>
+      <div id="main">
+        <div id="tabs">
+          <div class="tab" id="selected">Overview</div>
+          <div class="tab">Sleep</div>
+          <div class="tab">Activity</div>
+        </div>
+        <div id="content">
+          <div class="tile" id="graph-section">
+            <div id="overview-graph" class="graph">Overview lol</div>
+            <div id="sleep-graph" class="graph">Sleep lol</div>
+            <div id="activity-graph" class="graph">activities lol</div>
+          </div>
+          <div class="tile" id="insights-section">
+            <div class="title">Insights</div>
+            <div id="insights-content">
+              <div id="insight">
+                <img src="assets/warning.png" class="icon" />
+                <div id="insight-info">
+                  <p>Low Heart Rate and Low Average Breathing</p>
+                  <p2>Check their medicine intake</p2>
+                </div>
+              </div>
+              <div id="insight">
+                <img src="assets/warning.png" class="icon" />
+                <div id="insight-info">
+                  <p>Low Heart Rate and Low Average Breathing</p>
+                  <p2>Check their medicine intake</p2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span onclick="closeModal()" style="cursor: pointer; float: right"
+          ><img src="assets/close.png" class="icon"
+        /></span>
+		<div>
+        <h2>Upload Data</h2>
+        <p2>Upload each file.</p2>
 	</div>
+        <form>
+			<div id="uploads">
+          
+          <div class="upload">
+			<p>Choose Sleep File</p>
+            <input type="file" id="sleepFile" />
+            
+          </div>
+          
+          <div class="upload">
+			<p>Choose Activity File</p>
 
-	<form class="input-group col-4 mb-5">
-		<p>Choose Sleep File</p>
-		<input type="file" class="form-control" id="sleepFile" />
-		<button class="btn ml-2" type="submit" id="upload-button">
-		 Upload
-		</button><br>
-		<p>Choose Activity File</p>
-		<input type="file" class="form-control" id="activityFile" />
-		<button class="btn ml-2" type="submit" id="upload-button2">
-		 Upload
-		</button>
-   </form>
+            <input type="file" id="activityFile" />
+		  </div>
+		  </div>
 
-   
-		<script src="sketchfile.js"></script>
+		  <div id="button-container">
+		  <button type="submit">
+			Upload
+		   </button>
+		</div>
+        </form>
+      </div>
+    </div>
 
+    <script defer>
+      const tabs = document.querySelectorAll(".tab");
+      const overviewGraph = document.getElementById("overview-graph");
+      const sleepGraph = document.getElementById("sleep-graph");
+      const activityGraph = document.getElementById("activity-graph");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.removeAttribute("id"));
+          tab.setAttribute("id", "selected");
+
+          if (tab.innerHTML === "Overview") {
+            overviewGraph.style.display = "block";
+            sleepGraph.style.display = "none";
+            activityGraph.style.display = "none";
+          } else if (tab.innerHTML === "Sleep") {
+            overviewGraph.style.display = "none";
+            sleepGraph.style.display = "block";
+            activityGraph.style.display = "none";
+          } else if (tab.innerHTML === "Activity") {
+            overviewGraph.style.display = "none";
+            sleepGraph.style.display = "none";
+            activityGraph.style.display = "block";
+          }
+        });
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        // Hide the modal when the page loads
+        closeModal();
+      });
+
+      function openModal() {
+        document.getElementById("myModal").style.display = "flex";
+      }
+
+      // JavaScript to close the modal
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
+
+      // Close the modal when clicking outside of it (optional)
+      window.onclick = function (event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
   </body>
 </html>
